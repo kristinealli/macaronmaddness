@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Parisienne&family=Quicksand:wght@300&display=swap" rel="stylesheet">
+    <title>Macaron Madness</title>
+    <style>
+        body{
+            font-family: 'Quicksand', sans-serif;
+            color: rgb(237, 229, 190);
+            background: black;
+            text-align: center;
+            max-width: 1040px;
+        }
+        
+        h1{
+            font-family: 'Parisienne', 'Times New Roman', Times, serif;
+            color: rgb(75, 232, 232);
+            text-align: center;
+            font-size: 100px;
+            margin-bottom: -1%;
+        }
+        
+        .wish {
+            font-family: 'Parisienne', 'Times New Roman', Times, serif;
+            font-size: 30px;
+            margin-top: 0px;
+        }
+        
+        img {
+            position:absolute;
+            height: 100px;
+        }
+        
+        div {
+            position: absolute;
+            width: 500px;
+            height: 500px;
+            background-color: rgba(183, 142, 172);
+            border: 5px solid white;
+        }
+        
+        #rightSide {
+            left: 550px;
+            border: none;
+        }
+        
+        footer {
+            margin-top: 550px;
+            color: gray;
+        }
+        
+        .instructions {
+            color: pink;
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Macaron Madness</h1>
+    <p>Amelie the Baker has a regular customer that always orders boxes of macarons for her clients. In order to not show favoritism, the boxes MUST be identical -  but the new automated assistant keeps adding an extra macaron to the box on the left! </p>
+    <p class="instructions">Help Amelie find the extra macaron (by clicking on the extra one on the left side) so she can fill the order!</p>
+    <p> Each time she perfectly finishes the request, the happy patron places another, larger order! 
+    <p class="wish">Good Luck!</p>
+    <div class="child" id="leftSide"></div>
+    <div class="child" id="rightSide"></div> 
+    <script> 
+/* global variables */
+    window.addEventListener("load", generateMacaron);
+    let numberOfMacarons = 5;
+    const theLeftSide = document.getElementById("leftSide");
+    const theRightSide = document.getElementById("rightSide");
+/* create generateMacaron function */
+    function generateMacaron() {
+        for (i = 0; i < numberOfMacarons; i++) {
+            const macaron = 
+            document.createElement("img");
+            macaron.src = "./macaron.png";
+            let top_position = Math.floor(Math.random() * 401);
+            let left_position = Math.floor(Math.random() * 401);
+            macaron.style.top = top_position + "px";
+            macaron.style.left = left_position + "px";
+            theLeftSide.appendChild(macaron);
+        }
+/* clone images to the right side */
+            const leftSideImages = 
+            theLeftSide.cloneNode(true); 
+            leftSideImages.removeChild(leftSideImages.lastChild);
+            theRightSide.appendChild(leftSideImages);
+            theLeftSide.lastChild.addEventListener("click", nextLevel);
+            document.body.addEventListener("click", gameOver);
+    }
+/* actions if extra macaron is clicked */
+    function nextLevel(){
+        event.stopPropagation();
+        while (theLeftSide.lastChild) {
+                theLeftSide.removeChild(theLeftSide.lastElementChild);
+            };
+        while (theRightSide.lastChild) {
+                theRightSide.removeChild(theRightSide.lastElementChild);
+            }; 
+            numberOfMacarons += 5;
+        generateMacaron();
+    }
+/* actions if wrong macaron is clicked */
+    function gameOver(){
+        alert("It's been a sweet run, but Game Over! \n\nYou helped the Baker fill " + numberOfMacarons / 5 + " orders!");
+        document.body.removeEventListener("click", gameOver);
+        theLeftSide.lastChild.removeEventListener("click", nextLevel);
+    }       
+</script> 
+</body>
+<footer>
+    <a href="https://www.flaticon.com/free-icons/macaron" class="macaron icons">Macaron icons created by Freepik - Flaticon</a>
+    <p>Game designed and developed by Kristine Johnson as part of NuCamp Web Development Fundamentals.</p>
+</footer>
+</html>
